@@ -7,6 +7,9 @@ Using it
 ```PHP
 $magic = new calderawp\filter\magictag();
 echo $magic->do_magic_tag('{date:r}');
+
+// as a global content filter to use tags in content for posts.
+add_filter('the_content', array( 'calderawp\filter\magictag', 'do_magic_tag' ) );
 ```
 
 Built in tags
