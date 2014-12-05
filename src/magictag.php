@@ -18,7 +18,6 @@ namespace calderawp\magic\tag;
  */
 class magictag {
 	
-
 	/**
 	 * Renders a magic tag
 	 *
