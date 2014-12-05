@@ -2,19 +2,19 @@
 /**
  * Magic Tags main class
  *
- * @package caldera\magictag
+ * @package caldera\magic\tag
  * @author    David Cramer <david@digilab.co.za>
  * @license   GPL-2.0+
  * @link
  * @copyright 2014 David Cramer
  */
 
-namespace calderawp\magictag;
+namespace calderawp\magic\tag;
 
 /**
  * Class magictag
  *
- * @package caldera\magictag
+ * @package caldera\magic\tag
  */
 class magictag {
 	
