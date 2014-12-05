@@ -30,8 +30,8 @@ IP address of the visitor
 Extending - Filters
 ---------
 ```PHP
-apply_filters( 'caldera_magic_tag`, $filterd_tag, $original_tag );
-apply_filters( 'caldera_magic_tag-my_tag`, $filterd_tag, $args_array );
+apply_filters( 'caldera_magic_tag', $filterd_tag, $original_tag );
+apply_filters( 'caldera_magic_tag-my_tag', $filterd_tag, $args_array );
 echo $magic->do_magic_tag('An example of {my_tag:argument}');
 ```
 
