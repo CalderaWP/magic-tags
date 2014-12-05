@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "calderawp\\magic\\tag\\": "src"
+            "calderawp\\filter\\": "src"
         }
     }
 }
