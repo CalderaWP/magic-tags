@@ -147,21 +147,19 @@ class magictag {
 				$field = explode(',', $field);
 			}
 			if(!empty($post_metavalue)){
-				if( !is_array( $field ) ){
-					$magic_tag = implode(', ', $post_metavalue);
-				}else{
-					$outmagic = array();
-					foreach ($field as $requested_field) {
-						foreach( (array) $post_metavalue as $meta_field){
-							if(isset($meta_field[$subvalue])){
-								$outmagic[] = $post_metavalue;
-							}												
-						}
-					}
-					if( !empty( $outmagic ) ){
-						$magic_tag = implode(', ', $outmagic);
+
+				$outmagic = array();
+				foreach ( (array) $field as $requested_field) {
+					foreach( (array) $post_metavalue as $meta_field){
+						if(isset($meta_field[$subvalue])){
+							$outmagic[] = $post_metavalue;
+						}												
 					}
 				}
+				if( !empty( $outmagic ) ){
+					$magic_tag = implode(', ', $outmagic);
+				}
+				
 			}
 		}
 		return $magic_tag;		
@@ -174,10 +172,9 @@ class magictag {
 	 */
 	static public function filter_user( $params ){
 
-		if(!is_user_logged_in()){
+		if(!is_user_logged_in() || empty( $params[0] ) ){
 			return null;
 		}
-
 		$user = get_userdata( get_current_user_id() );
 		if(isset( $user->data->{$params[0]} )){
 			return $user->data->{$params[0]};
