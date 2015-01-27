@@ -73,6 +73,11 @@ class Tests_The_Magic extends WP_UnitTestCase {
 	public function test_user() {
 		
 		$magic = new calderawp\filter\magictag();
+
+		// not logged in
+		$this->assertSame( 'user name is {user:user_login}'	, $magic->do_magic_tag( 'user name is {user:user_login}' ) );
+		$this->assertSame( 'no meta {user:stuff}'			, $magic->do_magic_tag( 'no meta {user:stuff}' ) );
+
 		wp_set_current_user( 1 );
 
 		$this->assertSame( 'user name is admin' 			, $magic->do_magic_tag( 'user name is {user:user_login}' ) );
