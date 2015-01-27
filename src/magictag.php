@@ -142,14 +142,12 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_post( $params ){
+	static public function filter_post( $in_params ){
 
 		// check if there is a third
-		if( false !== strpos( $params, ':') ){
-			$params = explode( ':', $params );
-		}
+		$params = explode( ':', $in_params );
 
-		if( is_array( $params ) ){
+		if( isset( $params[1] ) ){
 			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
 			$post = get_post( $params[0] );
 			$field = $params[1];
@@ -157,15 +155,15 @@ class magictag {
 		}else{
 			// stic to current post
 			global $post;
-			$field = $params;
+			$field = $params[0];
 		}
 
-		if(is_object($post)){
+		// try object	
+		if(isset( $post->{$field} )){
 			
-			if(isset( $post->{$field} )){
-				return $post->{$field};
-			}
+			return $post->{$field};
 
+		}elseif(isset( $post->ID )){
 			// try meta data
 			$post_metavalue = get_post_meta( $post->ID, $field );
 			if( !empty( $post_metavalue ) ){
@@ -173,7 +171,7 @@ class magictag {
 			}
 		}
 
-		return $params;
+		return $in_params;
 
 	}
 
