@@ -87,14 +87,14 @@ class magictag {
 	static public function filter_get_var( $params ){
 
 		if( isset($_GET[$params])){
-			return $_GET[$params];
+			return wp_slash( $_GET[$params] );
 		}else{
 			if( !empty( $_SERVER['HTTP_REFERER'] ) ){
 				$referer = parse_url( $_SERVER['HTTP_REFERER'] );
 				if( !empty( $referer['query'] ) ){
 					parse_str( $referer['query'], $get_vars );
 					if( isset( $get_vars[$params] ) ){
-						return $get_vars[$params];
+						return wp_slash( $get_vars[$params] );
 					}
 				}
 			}
@@ -113,7 +113,7 @@ class magictag {
 	static public function filter_post_var( $params ){
 
 		if( isset($_POST[$params])){
-			return $_POST[$params];
+			return wp_slash( $_POST[$params] );
 		}
 
 		return $params;		
@@ -129,7 +129,7 @@ class magictag {
 	static public function filter_request_var( $params ){
 
 		if( isset($_REQUEST[$params])){
-			return $_REQUEST[$params];
+			return wp_slash( $_REQUEST[$params] );
 		}
 
 		return $params;
@@ -144,10 +144,16 @@ class magictag {
 	 */
 	static public function filter_post( $params ){
 
-		if( isset( $params[1] ) ){
+		// check if there is a third
+		if( false !== strpos( $params, ':') ){
+			$params = explode( ':', $params );
+		}
+
+		if( is_array( $params ) ){
 			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
-			$post = get_post( $params );
+			$post = get_post( $params[0] );
 			$field = $params[1];
+			
 		}else{
 			// stic to current post
 			global $post;
@@ -178,7 +184,7 @@ class magictag {
 					}
 				}
 				if( !empty( $outmagic ) ){
-					$return implode(', ', $outmagic);
+					return implode(', ', $outmagic);
 				}
 				
 			}
