@@ -23,14 +23,14 @@ class magictag {
 	 */
 	function __construct() {
 
+		// post
+		add_filter( 'caldera_magic_tag-post', array( $this, 'filter_post') );
 		// GET
 		add_filter( 'caldera_magic_tag-_GET', array( $this, 'filter_get_var') );
 		// POST
 		add_filter( 'caldera_magic_tag-_POST', array( $this, 'filter_post_var') );
 		// REQUEST
 		add_filter( 'caldera_magic_tag-_REQUEST', array( $this, 'filter_request_var') );
-		// post
-		add_filter( 'caldera_magic_tag-post', array( $this, 'filter_post') );
 		// user
 		add_filter( 'caldera_magic_tag-user', array( $this, 'filter_user') );
 		// date
@@ -77,6 +77,47 @@ class magictag {
 
 	}
 
+	/**
+	 * Filters a post magic tag
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return    string 	converted tag value
+	 */
+	static public function filter_post( $in_params ){
+
+		// check if there is a third
+		$params = explode( ':', $in_params );
+
+		if( isset( $params[1] ) ){
+			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
+			$post = get_post( $params[0] );
+			$field = $params[1];
+			
+		}else{
+			// stic to current post
+			global $post;
+			$field = $params[0];
+		}
+
+		// try object	
+		if(!is_object( $post->{$field} )){
+			return $in_params;
+		}
+		
+		if(!isset( $post->{$field} )){			
+			return $post->{$field};
+		}
+		
+		// try meta data
+		$post_metavalue = get_post_meta( $post->ID, $field );
+		if( !empty( $post_metavalue ) ){
+			return implode( ', ', $post_metavalue );
+		}
+
+		return $in_params;
+
+	}
 	/**
 	 * Filters a GET magic tag
 	 *
@@ -133,48 +174,6 @@ class magictag {
 		}
 
 		return $params;
-	}
-
-	/**
-	 * Filters a post magic tag
-	 *
-	 * @since 0.0.1
-	 *
-	 * @return    string 	converted tag value
-	 */
-	static public function filter_post( $in_params ){
-
-		// check if there is a third
-		$params = explode( ':', $in_params );
-
-		if( isset( $params[1] ) ){
-			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
-			$post = get_post( $params[0] );
-			$field = $params[1];
-			
-		}else{
-			// stic to current post
-			global $post;
-			$field = $params[0];
-		}
-
-		// try object	
-		if(!is_object( $post->{$field} )){
-			return $in_params;
-		}
-		
-		if(!isset( $post->{$field} )){			
-			return $post->{$field};
-		}
-		
-		// try meta data
-		$post_metavalue = get_post_meta( $post->ID, $field );
-		if( !empty( $post_metavalue ) ){
-			return implode( ', ', $post_metavalue );
-		}
-
-		return $in_params;
-
 	}
 
 	/**
