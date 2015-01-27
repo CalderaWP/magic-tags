@@ -159,16 +159,18 @@ class magictag {
 		}
 
 		// try object	
-		if(isset( $post->{$field} )){
-			
+		if(!is_object( $post->{$field} )){
+			return $in_params;
+		}
+		
+		if(!isset( $post->{$field} )){			
 			return $post->{$field};
-
-		}elseif(isset( $post->ID )){
-			// try meta data
-			$post_metavalue = get_post_meta( $post->ID, $field );
-			if( !empty( $post_metavalue ) ){
-				return implode( ', ', $post_metavalue );
-			}
+		}
+		
+		// try meta data
+		$post_metavalue = get_post_meta( $post->ID, $field );
+		if( !empty( $post_metavalue ) ){
+			return implode( ', ', $post_metavalue );
 		}
 
 		return $in_params;
