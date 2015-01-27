@@ -35,7 +35,7 @@ class magictag {
 		add_filter( 'caldera_magic_tag-user', array( $this, 'filter_user') );
 		// date
 		add_filter( 'caldera_magic_tag-date', array( $this, 'filter_date') );
-		// date
+		// ip
 		add_filter( 'caldera_magic_tag-ip', array( $this, 'filter_ip') );
 	
 	}
