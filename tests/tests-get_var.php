@@ -90,14 +90,23 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 		$this->assertSame( 'post_title is sample post'			, $magic->do_magic_tag( 'post_title is {post:' . $posts[0]->ID . ':post_title}' ) );
 		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':sample_meta}' ) );
-		$this->assertSame( 'meta data is private meta value'		, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':_sample_meta}' ) );
+		$this->assertSame( 'meta data is private meta value'	, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':_sample_meta}' ) );
 
 		// set post global
 		$post = $posts[0];
 
 		$this->assertSame( 'post_title is sample post'			, $magic->do_magic_tag( 'post_title is {post:post_title}' ) );
 		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:sample_meta}' ) );
-		$this->assertSame( 'meta data is private meta value'		, $magic->do_magic_tag( 'meta data is {post:_sample_meta}' ) );
+		$this->assertSame( 'meta data is private meta value'	, $magic->do_magic_tag( 'meta data is {post:_sample_meta}' ) );
+
+		// bad data
+		$this->assertSame( 'meta data is {post:no_real}'		, $magic->do_magic_tag( 'meta data is {post:no_real}' ) );
+		// no post
+		$post = null;
+		$this->assertSame( 'title is {post:post_title}'			, $magic->do_magic_tag( 'title is {post:post_title}' ) );
+		$this->assertSame( 'meta data is {post:sample_meta}'	, $magic->do_magic_tag( 'meta data is {post:sample_meta}' ) );
+		$this->assertSame( 'meta data is {post:_sample_meta}'	, $magic->do_magic_tag( 'meta data is {post:_sample_meta}' ) );
+
 
 	}
 
@@ -116,8 +125,30 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.1';
 		$this->assertSame( 'Forward IP is 192.168.0.1' 			, $magic->do_magic_tag( 'Forward IP is {ip:address}' ) );
 
+	}
 
+	public function test_date() {
+		
+		$magic = new calderawp\filter\magictag();		
+
+		$date = date('Y m m d d m y YY lR');
+
+		$this->assertSame( $date , $magic->do_magic_tag( '{date:Y m m d d m y YY lR}' ) );
 
 	}
 
+
+	public function test_nothing() {
+		$magic = new calderawp\filter\magictag();		
+
+		$this->assertSame( 'This is a string without tags'		, $magic->do_magic_tag( 'This is a string without tags' ) );
+	}
+
 }
+
+
+
+
+
+
+
