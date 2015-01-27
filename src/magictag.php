@@ -37,7 +37,7 @@ class magictag {
 		add_filter( 'caldera_magic_tag-date', array( $this, 'filter_date') );
 		// ip
 		add_filter( 'caldera_magic_tag-ip', array( $this, 'filter_ip') );
-	
+		
 	}
 
 	/**
@@ -53,21 +53,13 @@ class magictag {
 		// on found tags
 		if(!empty($magics[1])){
 			foreach($magics[1] as $magic_key=>$magic_tag){
-
 				$params = explode(':', $magic_tag, 2 );
-				
-				// create the base for arguments to be added as second filter arg
-				$magic_tag_base = $params[0];
-				$magic_tag_val = $params[1];
-
-				// filter the matched tag part
-				$pre_value = apply_filters( "caldera_magic_tag-{$magic_tag_base}", $magic_tag_val);
 				// filter a general tag using the second argument as the original tag
-				$filter_value = apply_filters( 'caldera_magic_tag', $pre_value, $magics[0][$magic_key]);
+				$filter_value = apply_filters( 'caldera_magic_tag', apply_filters( "caldera_magic_tag-{$params[0]}", $params[1] ) , $magics[0][$magic_key]);
 				// chech the tag changed
-				if( $filter_value != $magic_tag_val ){
+				if( $filter_value !== $params[1] ){
 					// on a difference in the tag, replace it.
-					$content = str_replace($magics[0][$magic_key], $filter_value, $content);
+					$content = str_replace( $magics[0][$magic_key], $filter_value, $content );
 				}
 			}
 		}
@@ -101,11 +93,9 @@ class magictag {
 		}
 
 		// try object	
-		if(!is_object( $post->{$field} )){
+		if( !is_object( $post ) ){
 			return $in_params;
-		}
-		
-		if(!isset( $post->{$field} )){			
+		}elseif( isset( $post->{$field} ) ){
 			return $post->{$field};
 		}
 		
