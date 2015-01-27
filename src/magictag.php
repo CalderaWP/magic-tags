@@ -85,22 +85,22 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_get_var( $params ){
-		$magic_tag = null;
+
 		if( isset($_GET[$params])){
-			$magic_tag = $_GET[$params];
+			return $_GET[$params];
 		}else{
 			if( !empty( $_SERVER['HTTP_REFERER'] ) ){
 				$referer = parse_url( $_SERVER['HTTP_REFERER'] );
 				if( !empty( $referer['query'] ) ){
 					parse_str( $referer['query'], $get_vars );
 					if( isset( $get_vars[$params] ) ){
-						$magic_tag = $get_vars[$params];
+						return $get_vars[$params];
 					}
 				}
 			}
 		}
 
-		return $magic_tag;		
+		return $params;		
 	}
 
 	/**
@@ -111,12 +111,12 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_post_var( $params ){
-		$magic_tag = null;
+
 		if( isset($_POST[$params])){
-			$magic_tag = $_POST[$params];
+			return $_POST[$params];
 		}
 
-		return $magic_tag;		
+		return $params;		
 	}
 
 	/**
@@ -127,13 +127,12 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_request_var( $params ){
-		$magic_tag = null;
+
 		if( isset($_REQUEST[$params])){
-			$magic_tag = $_REQUEST[$params];
+			return $_REQUEST[$params];
 		}
 
-		return $magic_tag;
-
+		return $params;
 	}
 
 	/**
@@ -144,8 +143,6 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_post( $params ){
-		// set default value.
-		$magic_tag = null;
 
 		if( isset( $params[1] ) ){
 			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
@@ -181,13 +178,13 @@ class magictag {
 					}
 				}
 				if( !empty( $outmagic ) ){
-					$magic_tag = implode(', ', $outmagic);
+					$return implode(', ', $outmagic);
 				}
 				
 			}
 		}
 
-		return $magic_tag;
+		return $params;
 
 	}
 
@@ -224,6 +221,7 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_date( $params ){
+
 		return date( $params );
 
 	}
@@ -236,7 +234,16 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_ip( ){
-		return $_SERVER['REMOTE_ADDR'];
+		
+		// get IP
+		$ip = $_SERVER['REMOTE_ADDR'];
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+
+		return $ip;
 
 	}
 
