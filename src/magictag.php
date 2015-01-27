@@ -63,7 +63,7 @@ class magictag {
 				// filter the matched tag part
 				$pre_value = apply_filters( "caldera_magic_tag-{$magic_tag_base}", $magic_tag_val);
 				// filter a general tag using the second argument as the original tag
-				$filter_value = apply_filters( 'caldera_magic_tag', $pre_value, $magics[0][$magic_key]);				
+				$filter_value = apply_filters( 'caldera_magic_tag', $pre_value, $magics[0][$magic_key]);
 				// chech the tag changed
 				if( $filter_value != $magic_tag_val ){
 					// on a difference in the tag, replace it.
@@ -163,30 +163,13 @@ class magictag {
 		if(is_object($post)){
 			
 			if(isset( $post->{$field} )){
-			
 				return $post->{$field};
-			
 			}
 
 			// try meta data
 			$post_metavalue = get_post_meta( $post->ID, $field );
-			if( false !== strpos($field, ',') ){
-				$field = explode(',', $field);
-			}
-			if(!empty($post_metavalue)){
-
-				$outmagic = array();
-				foreach ( (array) $field as $requested_field) {
-					foreach( (array) $post_metavalue as $meta_field){
-						if(isset($meta_field[$subvalue])){
-							$outmagic[] = $post_metavalue;
-						}												
-					}
-				}
-				if( !empty( $outmagic ) ){
-					return implode(', ', $outmagic);
-				}
-				
+			if( !empty( $post_metavalue ) ){
+				return implode( ', ', $post_metavalue );
 			}
 		}
 
