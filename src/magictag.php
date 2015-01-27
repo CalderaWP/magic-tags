@@ -45,7 +45,7 @@ class magictag {
 	 *
 	 * @return    string 	converted string with matched tags replaced
 	 */
-	static public function do_magic_tag($content){
+	public function do_magic_tag($content){
 
 		// check for magics
 		preg_match_all("/\{(.+?)\}/", (string) $content, $magics);
@@ -70,13 +70,40 @@ class magictag {
 	}
 
 	/**
+	 * Gets a posts meta value
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return    string 	post field value
+	 */
+	private function get_post_value( $field, $in_params, $post ){
+		
+		if( !is_object( $post ) ){
+			return $in_params;
+		}
+
+		if( isset( $post->{$field} ) ){
+			return $post->{$field};
+		}
+		
+		// try meta data
+		$post_metavalue = get_post_meta( $post->ID, $field );
+		if( !empty( $post_metavalue ) ){
+			return implode( ', ', $post_metavalue );
+		}
+
+		return $in_params;
+	}
+
+
+	/**
 	 * Filters a post magic tag
 	 *
 	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_post( $in_params ){
+	public function filter_post( $in_params ){
 
 		// check if there is a third
 		$params = explode( ':', $in_params );
@@ -93,19 +120,7 @@ class magictag {
 		}
 
 		// try object	
-		if( !is_object( $post ) ){
-			return $in_params;
-		}elseif( isset( $post->{$field} ) ){
-			return $post->{$field};
-		}
-		
-		// try meta data
-		$post_metavalue = get_post_meta( $post->ID, $field );
-		if( !empty( $post_metavalue ) ){
-			return implode( ', ', $post_metavalue );
-		}
-
-		return $in_params;
+		return $this->get_post_value( $field, $in_params, $post );
 
 	}
 	/**
@@ -115,23 +130,23 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_get_var( $params ){
+	public function filter_get_var( $params ){
 
 		if( isset($_GET[$params])){
 			return wp_slash( $_GET[$params] );
-		}else{
-			if( !empty( $_SERVER['HTTP_REFERER'] ) ){
-				$referer = parse_url( $_SERVER['HTTP_REFERER'] );
-				if( !empty( $referer['query'] ) ){
-					parse_str( $referer['query'], $get_vars );
-					if( isset( $get_vars[$params] ) ){
-						return wp_slash( $get_vars[$params] );
-					}
+		}
+
+		if( !empty( $_SERVER['HTTP_REFERER'] ) ){
+			$referer = parse_url( $_SERVER['HTTP_REFERER'] );
+			if( !empty( $referer['query'] ) ){
+				parse_str( $referer['query'], $get_vars );
+				if( isset( $get_vars[$params] ) ){
+					return wp_slash( $get_vars[$params] );
 				}
 			}
 		}
 
-		return $params;		
+		return $params;
 	}
 
 	/**
@@ -141,7 +156,7 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_post_var( $params ){
+	public function filter_post_var( $params ){
 
 		if( isset($_POST[$params])){
 			return wp_slash( $_POST[$params] );
@@ -157,7 +172,7 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_request_var( $params ){
+	public function filter_request_var( $params ){
 
 		if( isset($_REQUEST[$params])){
 			return wp_slash( $_REQUEST[$params] );
@@ -173,7 +188,7 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_user( $params ){
+	public function filter_user( $params ){
 
 		if(!is_user_logged_in() || empty( $params ) ){
 			return null;
@@ -198,7 +213,7 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_date( $params ){
+	public function filter_date( $params ){
 
 		return date( $params );
 
@@ -211,7 +226,7 @@ class magictag {
 	 *
 	 * @return    string 	converted tag value
 	 */
-	static public function filter_ip( ){
+	public function filter_ip( ){
 		
 		// get IP
 		$ip = $_SERVER['REMOTE_ADDR'];
