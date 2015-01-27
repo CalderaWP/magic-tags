@@ -54,68 +54,92 @@ class magictag {
 		if(!empty($magics[1])){
 			foreach($magics[1] as $magic_key=>$magic_tag){
 
-				$params = explode(':', $magic_tag );
-
+				$params = explode(':', $magic_tag, 2 );
+				
 				// create the base for arguments to be added as second filter arg
-				$magic_tag_base = array_shift( $params );
+				$magic_tag_base = $params[0];
+				$magic_tag_val = $params[1];
+
 				// filter the matched tag part
-				$magic_tag = apply_filters( "caldera_magic_tag-{$magic_tag_base}", $params);
-
+				$pre_value = apply_filters( "caldera_magic_tag-{$magic_tag_base}", $magic_tag_val);
 				// filter a general tag using the second argument as the original tag
-				$filter_value = apply_filters( 'caldera_magic_tag', $magic_tag, $magics[0][$magic_key]);				
-
+				$filter_value = apply_filters( 'caldera_magic_tag', $pre_value, $magics[0][$magic_key]);				
 				// chech the tag changed
-				if( $filter_value != $magics[1][$magic_key] ){
+				if( $filter_value != $magic_tag_val ){
 					// on a difference in the tag, replace it.
 					$content = str_replace($magics[0][$magic_key], $filter_value, $content);
 				}
 			}
 		}
+
 		// return content converted or not.
 		return $content;
+
 	}
 
 	/**
-	 * filters a GET magic tag
+	 * Filters a GET magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_get_var( $params ){
 		$magic_tag = null;
-		if( isset($_GET[$params[0]])){
-			$magic_tag = $_GET[$params[0]];
+		if( isset($_GET[$params])){
+			$magic_tag = $_GET[$params];
+		}else{
+			if( !empty( $_SERVER['HTTP_REFERER'] ) ){
+				$referer = parse_url( $_SERVER['HTTP_REFERER'] );
+				if( !empty( $referer['query'] ) ){
+					parse_str( $referer['query'], $get_vars );
+					if( isset( $get_vars[$params] ) ){
+						$magic_tag = $get_vars[$params];
+					}
+				}
+			}
 		}
+
 		return $magic_tag;		
 	}
 
 	/**
-	 * filters a POST magic tag
+	 * Filters a POST magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_post_var( $params ){
 		$magic_tag = null;
-		if( isset($_POST[$params[0]])){
-			$magic_tag = $_POST[$params[0]];
+		if( isset($_POST[$params])){
+			$magic_tag = $_POST[$params];
 		}
+
 		return $magic_tag;		
 	}
 
 	/**
-	 * filters a REQUEST magic tag
+	 * Filters a REQUEST magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_request_var( $params ){
 		$magic_tag = null;
-		if( isset($_REQUEST[$params[0]])){
-			$magic_tag = $_REQUEST[$params[0]];
+		if( isset($_REQUEST[$params])){
+			$magic_tag = $_REQUEST[$params];
 		}
-		return $magic_tag;		
+
+		return $magic_tag;
+
 	}
 
 	/**
-	 * filters a post magic tag
+	 * Filters a post magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
@@ -125,12 +149,12 @@ class magictag {
 
 		if( isset( $params[1] ) ){
 			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
-			$post = get_post( $params[0] );
+			$post = get_post( $params );
 			$field = $params[1];
 		}else{
 			// stic to current post
 			global $post;
-			$field = $params[0];
+			$field = $params;
 		}
 
 		if(is_object($post)){
@@ -162,48 +186,58 @@ class magictag {
 				
 			}
 		}
-		return $magic_tag;		
+
+		return $magic_tag;
+
 	}
 
 	/**
-	 * filters a user magic tag
+	 * Filters a user magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_user( $params ){
 
-		if(!is_user_logged_in() || empty( $params[0] ) ){
+		if(!is_user_logged_in() || empty( $params ) ){
 			return null;
 		}
 		$user = get_userdata( get_current_user_id() );
-		if(isset( $user->data->{$params[0]} )){
-			return $user->data->{$params[0]};
+		if(isset( $user->data->{$params} )){
+			$params = $user->data->{$params};
 		}
 
-		$is_meta = get_user_meta( $user->ID, $params[0], true );
+		$is_meta = get_user_meta( $user->ID, $params, true );
 		if( !empty( $is_meta ) ){
-			return $is_meta;
+			$params = $is_meta;
 		}
 
-		return null;
+		return $params;
 	}
 
 	/**
-	 * filters a date magic tag
+	 * Filters a date magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_date( $params ){
-		return date( $params[0] );
+		return date( $params );
+
 	}
 
 	/**
-	 * filters a ip magic tag
+	 * Filters a ip magic tag
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return    string 	converted tag value
 	 */
 	static public function filter_ip( ){
 		return $_SERVER['REMOTE_ADDR'];
+
 	}
 
 } 
