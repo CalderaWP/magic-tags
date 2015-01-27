@@ -2,14 +2,16 @@ CalderaWP Magic Tags
 =======================
 Magic Tags renderer
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/badges/build.png?b=master)](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/build-status/master)
+
 Using it
 ---------
 ```PHP
 $magic = new calderawp\filter\magictag();
 echo $magic->do_magic_tag('{post:custom_field}');
 
-// as a global content filter to use tags in content for posts.
-add_filter('the_content', array( 'calderawp\filter\magictag', 'do_magic_tag' ) );
 ```
 
 Built in tags
