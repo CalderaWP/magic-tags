@@ -77,19 +77,13 @@ class magictag {
 	 * @return    string 	post field value
 	 */
 	private function get_post_value( $field, $in_params, $post ){
-		
+
 		if( !is_object( $post ) ){
 			return $in_params;
 		}
 
 		if( isset( $post->{$field} ) ){
 			return $post->{$field};
-		}
-		
-		// try meta data
-		$post_metavalue = get_post_meta( $post->ID, $field );
-		if( !empty( $post_metavalue ) ){
-			return implode( ', ', $post_metavalue );
 		}
 
 		return $in_params;
@@ -117,6 +111,7 @@ class magictag {
 			// stic to current post
 			global $post;
 			$field = $params[0];
+
 		}
 
 		// try object	

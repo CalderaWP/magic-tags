@@ -80,6 +80,27 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	}
 
+	public function test_post() {
+		
+		global $post;
+		
+		$magic = new calderawp\filter\magictag();
+		// get post
+		$posts = get_posts( array( 'post_status' => 'publish' ) );
+
+		$this->assertSame( 'post_title is sample post'			, $magic->do_magic_tag( 'post_title is {post:' . $posts[0]->ID . ':post_title}' ) );
+		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':sample_meta}' ) );
+		$this->assertSame( 'meta data is private meta value'		, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':_sample_meta}' ) );
+
+		// set post global
+		$post = $posts[0];
+
+		$this->assertSame( 'post_title is sample post'			, $magic->do_magic_tag( 'post_title is {post:post_title}' ) );
+		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:sample_meta}' ) );
+		$this->assertSame( 'meta data is private meta value'		, $magic->do_magic_tag( 'meta data is {post:_sample_meta}' ) );
+
+	}
+
 	public function test_ip() {
 		
 		$magic = new calderawp\filter\magictag();
@@ -89,7 +110,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'Remote IP is 127.0.0.1' 			, $magic->do_magic_tag( 'Remote IP is {ip:address}' ) );
 
 		$_SERVER['HTTP_CLIENT_IP']	=	'10.0.0.1';
-		$this->assertSame( 'Client IP is 10.0.0.1' 			, $magic->do_magic_tag( 'Client IP is {ip:address}' ) );
+		$this->assertSame( 'Client IP is 10.0.0.1' 				, $magic->do_magic_tag( 'Client IP is {ip:address}' ) );
 
 		unset( $_SERVER['HTTP_CLIENT_IP'] );
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.1';
