@@ -19,7 +19,3 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 require $_tests_dir . '/includes/bootstrap.php';
 
-global $current_user;
-
-$current_user = new WP_User(1);
-$current_user->set_role('administrator');

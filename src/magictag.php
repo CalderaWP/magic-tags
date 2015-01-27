@@ -190,8 +190,8 @@ class magictag {
 	 */
 	public function filter_user( $params ){
 
-		if(!is_user_logged_in() || empty( $params ) ){
-			return null;
+		if(!is_user_logged_in() ){
+			return $params;
 		}
 		$user = get_userdata( get_current_user_id() );
 		if(isset( $user->data->{$params} )){
