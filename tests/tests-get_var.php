@@ -16,13 +16,15 @@ class Tests_The_Magic extends WP_UnitTestCase {
 			'name'		=>	'Bob Bitmap',
 			'count'		=>	$count
 		);
-		// REFERR
-		$_SERVER['HTTP_REFERER'] = 'http://localhost/apath/?country=ZA&location=office';
-
 
 		$this->assertSame( 'Company is caldera' 					, $magic->do_magic_tag( 'Company is {_GET:company}' ) );
 		$this->assertSame( 'Name is Bob Bitmap' 					, $magic->do_magic_tag( 'Name is {_GET:name}' ) );
 		$this->assertSame( 'Total count is ' . $count 				, $magic->do_magic_tag( 'Total count is {_GET:count}' ) );
+		$this->assertSame( 'home is {_GET:home}' 					, $magic->do_magic_tag( 'home is {_GET:home}' ) );
+
+		// REFERR
+		$_SERVER['HTTP_REFERER'] = 'http://localhost/apath/?country=ZA&location=office';
+		
 		$this->assertSame( 'location is office' 					, $magic->do_magic_tag( 'location is {_GET:location}' ) );
 		$this->assertSame( 'country is ZA' 							, $magic->do_magic_tag( 'country is {_GET:country}' ) );
 		
