@@ -134,20 +134,31 @@ class magictag {
 
 		if( isset($_GET[$params])){
 			return wp_slash( $_GET[$params] );
-		}
-
-		if( !empty( $_SERVER['HTTP_REFERER'] ) ){
-			$referer = parse_url( $_SERVER['HTTP_REFERER'] );
-			if( !empty( $referer['query'] ) ){
-				parse_str( $referer['query'], $get_vars );
-				if( isset( $get_vars[$params] ) ){
-					return wp_slash( $get_vars[$params] );
-				}
-			}
+		}elseif( !empty( $_SERVER['HTTP_REFERER'] ) ){
+			return $this->filter_get_referr_var( $params );
 		}
 
 		return $params;
 	}
+
+	/**
+	 * Filters a GET from a referrer
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return    string 	converted tag value
+	 */
+	private function filter_get_referr_var( $params ){
+
+		$referer = parse_url( $_SERVER['HTTP_REFERER'] );
+		if( !empty( $referer['query'] ) ){
+			parse_str( $referer['query'], $get_vars );
+			if( isset( $get_vars[$params] ) ){
+				return wp_slash( $get_vars[$params] );
+			}
+		}
+		return $params;
+	}	
 
 	/**
 	 * Filters a POST magic tag
