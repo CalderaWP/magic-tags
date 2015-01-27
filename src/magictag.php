@@ -83,7 +83,7 @@ class magictag {
 		}
 
 		if( isset( $post->{$field} ) ){
-			return $post->{$field};
+			return implode( ', ', (array) $post->{$field} );
 		}
 
 		return $in_params;
@@ -206,7 +206,7 @@ class magictag {
 
 		$is_meta = get_user_meta( $user->ID, $params, true );
 		if( !empty( $is_meta ) ){
-			$params = $is_meta;
+			$params = implode( ', ', (array) $is_meta );
 		}
 
 		return $params;

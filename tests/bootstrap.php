@@ -30,5 +30,8 @@ $sample_post = array(
 $post_id = wp_insert_post( $sample_post );
 delete_post_meta( $post_id, 'sample_meta' );
 delete_post_meta( $post_id, '_sample_meta' );
+delete_post_meta( $post_id, 'array_meta' );
+
 add_post_meta( $post_id, 'sample_meta', 'sample meta value' );
 add_post_meta( $post_id, '_sample_meta', 'private meta value' );
+add_post_meta( $post_id, 'array_meta', array('value one', 'value two') );

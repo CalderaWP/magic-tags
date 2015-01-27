@@ -67,6 +67,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'Name is Bob Bitmap' 			, $magic->do_magic_tag( 'Name is {_REQUEST:name}' ) );
 
 		$this->assertSame( 'cant find {_REQUEST:billy} sorry' 	, $magic->do_magic_tag( 'cant find {_REQUEST:billy} sorry' ) );
+
 	}
 
 
@@ -98,6 +99,8 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'post_title is sample post'			, $magic->do_magic_tag( 'post_title is {post:' . $posts[0]->ID . ':post_title}' ) );
 		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':sample_meta}' ) );
 		$this->assertSame( 'meta data is private meta value'	, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':_sample_meta}' ) );
+		$this->assertSame( 'meta data is value one, value two'	, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':array_meta}' ) );
+
 
 		// set post global
 		$post = $posts[0];
@@ -105,6 +108,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'post_title is sample post'			, $magic->do_magic_tag( 'post_title is {post:post_title}' ) );
 		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:sample_meta}' ) );
 		$this->assertSame( 'meta data is private meta value'	, $magic->do_magic_tag( 'meta data is {post:_sample_meta}' ) );
+		$this->assertSame( 'meta data is value one, value two'	, $magic->do_magic_tag( 'meta data is {post:array_meta}' ) );
 
 		// bad data
 		$this->assertSame( 'meta data is {post:no_real}'		, $magic->do_magic_tag( 'meta data is {post:no_real}' ) );
@@ -113,7 +117,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'title is {post:post_title}'			, $magic->do_magic_tag( 'title is {post:post_title}' ) );
 		$this->assertSame( 'meta data is {post:sample_meta}'	, $magic->do_magic_tag( 'meta data is {post:sample_meta}' ) );
 		$this->assertSame( 'meta data is {post:_sample_meta}'	, $magic->do_magic_tag( 'meta data is {post:_sample_meta}' ) );
-
+		$this->assertSame( 'meta data is {post:array_meta}'		, $magic->do_magic_tag( 'meta data is {post:array_meta}' ) );
 
 	}
 
