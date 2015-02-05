@@ -54,6 +54,7 @@ class magictag {
 		if(!empty($magics[1])){
 			foreach($magics[1] as $magic_key=>$magic_tag){
 				$params = explode(':', $magic_tag, 2 );
+				if( empty( $params[1] ) ){ continue; }
 				// filter a general tag using the second argument as the original tag
 				$filter_value = apply_filters( 'caldera_magic_tag', apply_filters( "caldera_magic_tag-{$params[0]}", $params[1] ) , $magics[0][$magic_key]);
 				// chech the tag changed

@@ -155,6 +155,12 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'This is a string without tags'		, $magic->do_magic_tag( 'This is a string without tags' ) );
 	}
 
+	public function test_general() {
+		$magic = new calderawp\filter\magictag();		
+
+		$this->assertSame( '{post}'		, $magic->do_magic_tag( '{post}' ) );
+	}
+
 }
 
 
