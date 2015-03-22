@@ -9,7 +9,7 @@ Magic Tags renderer
 Using it
 ---------
 ```PHP
-$magic = new calderawp\filter\magictag();
+$magic = new \calderawp\filter\magictag();
 echo $magic->do_magic_tag('{post:custom_field}');
 
 ```

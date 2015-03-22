@@ -83,11 +83,33 @@ class magictag {
 			return $in_params;
 		}
 
+		if ( 'post_excerpt' == $field && '' == $post->post_excerpt ) {
+			add_filter( 'excerpt_more', array( $this, 'nothing' ) );
+			$excerpt = wp_trim_excerpt( $post->post_content );
+			remove_filter( 'excerpt_more', array( $this, 'nothing' ) );
+			return $excerpt;
+
+		}
+
 		if( isset( $post->{$field} ) ){
 			return implode( ', ', (array) $post->{$field} );
 		}
 
+
 		return $in_params;
+
+	}
+
+	/**
+	 * Returns an empty string.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	public function nothing() {
+		return  '';
+
 	}
 
 

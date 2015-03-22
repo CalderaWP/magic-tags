@@ -8,7 +8,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	public function test_get_var() {
 		
-		$magic = new calderawp\filter\magictag();
+		$magic = new \calderawp\filter\magictag();
 		$count = rand(0, 999);
 		// _GETS
 		$_GET = array(
@@ -37,7 +37,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	public function test_post_var() {
 		
-		$magic = new calderawp\filter\magictag();
+		$magic = new \calderawp\filter\magictag();
 		$count = rand(0, 999);
 		$_POST = array(
 			'company'	=>	'caldera',
@@ -55,7 +55,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	public function test_request_var() {
 		
-		$magic = new calderawp\filter\magictag();
+		$magic = new \calderawp\filter\magictag();
 		$count = rand(0, 999);
 
 		$_REQUEST = array(
@@ -73,7 +73,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	public function test_user() {
 		
-		$magic = new calderawp\filter\magictag();
+		$magic = new \calderawp\filter\magictag();
 
 		// not logged in
 		$this->assertSame( 'user name is {user:user_login}'	, $magic->do_magic_tag( 'user name is {user:user_login}' ) );
@@ -92,7 +92,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		
 		global $post;
 		
-		$magic = new calderawp\filter\magictag();
+		$magic = new \calderawp\filter\magictag();
 		// get post
 		$posts = get_posts( array( 'post_status' => 'publish' ) );
 
@@ -123,7 +123,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	public function test_ip() {
 		
-		$magic = new calderawp\filter\magictag();
+		$magic = new \calderawp\filter\magictag();
 
 		// get IP
 		$_SERVER['REMOTE_ADDR'] 	=	'127.0.0.1';
@@ -140,7 +140,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	public function test_date() {
 		
-		$magic = new calderawp\filter\magictag();		
+		$magic = new \calderawp\filter\magictag();
 
 		$date = date('Y m m d d m y YY lR');
 
@@ -150,13 +150,13 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 
 	public function test_nothing() {
-		$magic = new calderawp\filter\magictag();		
+		$magic = new \calderawp\filter\magictag();
 
 		$this->assertSame( 'This is a string without tags'		, $magic->do_magic_tag( 'This is a string without tags' ) );
 	}
 
 	public function test_general() {
-		$magic = new calderawp\filter\magictag();		
+		$magic = new \calderawp\filter\magictag();
 
 		$this->assertSame( '{post}'		, $magic->do_magic_tag( '{post}' ) );
 	}
