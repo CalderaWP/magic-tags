@@ -24,7 +24,8 @@ global $post;
 $sample_post = array(
 	'post_title'	=>	'sample post',
 	'post_content'	=>	'sample content',
-	'post_status'	=>	'publish'
+	'post_status'	=>	'publish',
+	'post_excerpt'	=>	''
 );
 
 $post_id = wp_insert_post( $sample_post );
