@@ -100,7 +100,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( 'meta data is sample meta value'		, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':sample_meta}' ) );
 		$this->assertSame( 'meta data is private meta value'	, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':_sample_meta}' ) );
 		$this->assertSame( 'meta data is value one, value two'	, $magic->do_magic_tag( 'meta data is {post:' . $posts[0]->ID . ':array_meta}' ) );
-
+		$this->assertSame( 'the excerpt is '					, $magic->do_magic_tag( 'the excerpt is {post:' . $posts[0]->ID . ':post_excerpt}' ) );
 
 		// set post global
 		$post = $posts[0];
