@@ -84,17 +84,22 @@ class magictag {
 		}
 
 		if ( 'post_excerpt' == $field && '' == $post->post_excerpt ) {
+			if ( 0 < strpos( $post->post_content, '<!--more-->' ) ){
+				$excerpt = substr( $post->post_content, 0, strpos( $post->post_content, '<!--more-->') );
+			} else {
+				/**
+				 * This filer is duplicated from WordPress core to respect core setting for excerpt length.
+				 *
+				 * It is documented in wp-includes/formatting.php
+				 */
+				$excerpt_length = apply_filters( 'excerpt_length', 55 );
+				$excerpt        = wp_trim_words( $post->post_content, $excerpt_length, '' );
+			}
 
-			/**
-			 * This filer is duplicated from WordPress core to respect core setting for excerpt length.
-			 *
-			 * It is documented in wp-includes/formatting.php
-			 */
-			$excerpt_length = apply_filters( 'excerpt_length', 55 );
-			$excerpt = wp_trim_words( $post->post_content, $excerpt_length, '' );
 			return $excerpt;
 
 		}
+
 
 		if( isset( $post->{$field} ) ){
 			return implode( ', ', (array) $post->{$field} );
