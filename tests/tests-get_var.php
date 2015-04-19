@@ -205,14 +205,14 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		global $post;
 
 		$data = array(
-			'post_content' => 'A123456789B123456789C123456789D123456789E123456789F1234NOTINEXCERPT'
+			'post_content' => 'A 1 2 3 4 5 6 7 8 9 B 1 2 3 4 5 6 7 8 9 C 1 2 3 4 5 6 7 8 9 D 1 2 3 4 5 6 7 8 9 E 1 2 3 4 5 6 7 8 9 F 1 2 3 4 NOTINEXCERPT Bad do not want to see this.'
 		);
 		$id = wp_insert_post( $data, true );
 
 		$post = get_post( $id );
 		$this->assertFalse( is_a( $post, 'WP_Error' ) );
 		$magic = new \calderawp\filter\magictag();
-		$this->assertSame( 'A123456789B123456789C123456789D123456789E123456789F1234', $magic->do_magic_tag( '{post:post_excerpt}' ) );
+		$this->assertSame( 'A 1 2 3 4 5 6 7 8 9 B 1 2 3 4 5 6 7 8 9 C 1 2 3 4 5 6 7 8 9 D 1 2 3 4 5 6 7 8 9 E 1 2 3 4 5 6 7 8 9 F 1 2 3 4', $magic->do_magic_tag( '{post:post_excerpt}' ) );
 
 
 	}
@@ -223,7 +223,7 @@ class Tests_The_Magic extends WP_UnitTestCase {
 	 * @since 1.0.1
 	 *
 	 */
-	public function test_more_tagexcerpt() {
+	public function test_more_tag_excerpt() {
 		global $post;
 
 		$data = array(

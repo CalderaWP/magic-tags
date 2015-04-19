@@ -84,9 +84,14 @@ class magictag {
 		}
 
 		if ( 'post_excerpt' == $field && '' == $post->post_excerpt ) {
-			add_filter( 'excerpt_more', array( $this, 'nothing' ) );
-			$excerpt = wp_trim_excerpt( $post->post_content );
-			remove_filter( 'excerpt_more', array( $this, 'nothing' ) );
+
+			/**
+			 * This filer is duplicated from WordPress core to respect core setting for excerpt length.
+			 *
+			 * It is documented in wp-includes/formatting.php
+			 */
+			$excerpt_length = apply_filters( 'excerpt_length', 55 );
+			$excerpt = wp_trim_words( $post->post_content, $excerpt_length, '' );
 			return $excerpt;
 
 		}
