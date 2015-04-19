@@ -161,7 +161,85 @@ class Tests_The_Magic extends WP_UnitTestCase {
 		$this->assertSame( '{post}'		, $magic->do_magic_tag( '{post}' ) );
 	}
 
+	/**
+	 * Test post magic tag with a custom defined excerpt
+	 *
+	 * @since 1.0.1
+	 *
+	 */
+	public function test_custom_excerpt() {
+		global $post;
+
+		//test with no post content
+		$data = array(
+			'post_excerpt' => 'lorem ipsum'
+		);
+		$id = wp_insert_post( $data, true );
+
+		$post = get_post( $id );
+		$this->assertFalse( is_a( $post, 'WP_Error' ) );
+		$magic = new \calderawp\filter\magictag();
+		$this->assertSame( 'lorem ipsum', $magic->do_magic_tag( '{post:post_excerpt}' ) );
+
+		//test with post content
+		$data = array(
+			'post_excerpt' => 'lorem ipsum',
+			'post_title'   => 'hats!'
+		);
+		$id = wp_insert_post( $data, true );
+
+		$post = get_post( $id );
+		$this->assertFalse( is_a( $post, 'WP_Error' ) );
+		$magic = new \calderawp\filter\magictag();
+		$this->assertSame( 'lorem ipsum', $magic->do_magic_tag( '{post:post_excerpt}' ) );
+
+	}
+
+	/**
+	 * Test post magic tag with an auto-defined excerpt
+	 *
+	 * @since 1.0.1
+	 *
+	 */
+	public function test_auto_excerpt() {
+		global $post;
+
+		$data = array(
+			'post_content' => 'A123456789B123456789C123456789D123456789E123456789F1234NOTINEXCERPT'
+		);
+		$id = wp_insert_post( $data, true );
+
+		$post = get_post( $id );
+		$this->assertFalse( is_a( $post, 'WP_Error' ) );
+		$magic = new \calderawp\filter\magictag();
+		$this->assertSame( 'A123456789B123456789C123456789D123456789E123456789F1234', $magic->do_magic_tag( '{post:post_excerpt}' ) );
+
+
+	}
+
+	/**
+	 * Test post magic tag with a <!--more--> excerpt
+	 *
+	 * @since 1.0.1
+	 *
+	 */
+	public function test_more_tagexcerpt() {
+		global $post;
+
+		$data = array(
+			'post_content' => 'lorem ipsum<!--more-->NOTINEXCERPT'
+		);
+		$id = wp_insert_post( $data, true );
+
+		$post = get_post( $id );
+		$this->assertFalse( is_a( $post, 'WP_Error' ) );
+		$magic = new \calderawp\filter\magictag();
+		$this->assertSame( 'lorem ipsum', $magic->do_magic_tag( '{post:post_excerpt}' ) );
+
+	}
+
 }
+
 
 
 
