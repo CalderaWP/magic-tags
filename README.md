@@ -6,7 +6,7 @@ Magic Tags renderer
 [![Code Coverage](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/badges/build.png?b=master)](https://scrutinizer-ci.com/g/CalderaWP/magic-tags/build-status/master)
 
-Using it
+Using it (Making The Magic Happen)
 ---------
 ```PHP
 $magic = new \calderawp\filter\magictag();
