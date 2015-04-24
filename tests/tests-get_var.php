@@ -238,6 +238,81 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 	}
 
+	/**
+	 * Test post:post_thumbnail type magic tags
+	 *
+	 * @since 0.0.1
+	 */
+	public function test_thumbnail() {
+		$data = array(
+			'post_title' => 'hats'
+		);
+		$post_id = wp_insert_post( $data, true );
+		$filename = ( __DIR__ . '/data/run-action-banner.png' );
+		$contents = file_get_contents( $filename );
+
+		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$this->assertTrue( empty( $upload['error'] ) );
+		$attachment_id = $this->_make_attachment( $upload, $post_id, true );
+		$thumb = wp_get_attachment_image_src( $attachment_id );
+		$medium = wp_get_attachment_image_src( $attachment_id, 'medium' );
+
+		//test default size and size traversal for a specified post
+		$magic = new \calderawp\filter\magictag();
+		$this->assertSame( $thumb[0], $magic->do_magic_tag( 'post_title is {post:' . $post_id . ':post_thumbnail}' ) );
+		$this->assertSame( $medium[0], $magic->do_magic_tag( 'post_title is {post:' . $post_id . ':post_thumbnail.medium}' ) );
+
+		//test default size and size traversal for global $post
+		global $post;
+		$post = get_post( $post_id );
+		$this->assertFalse( is_a( $post, 'WP_Error' ) );
+		$this->assertSame( $thumb[0], $magic->do_magic_tag( 'post_title is {post:post_thumbnail}' ) );
+		$this->assertSame( $medium[0], $magic->do_magic_tag( 'post_title is {post:post_thumbnail.medium}' ) );
+
+
+	}
+
+	/**
+	 * Make an attachment to test with.
+	 *
+	 * @param null|string $upload
+	 * @param int $parent_post_id
+	 *
+	 * @return int
+	 */
+	function _make_attachment( $upload, $parent_post_id = 0, $make_featured = true ) {
+
+
+		$type = '';
+		if ( !empty($upload['type']) ) {
+			$type = $upload['type'];
+		} else {
+			$mime = wp_check_filetype( $upload['file'] );
+			if ($mime)
+				$type = $mime['type'];
+		}
+
+		$attachment = array(
+			'post_title' => basename( $upload['file'] ),
+			'post_content' => '',
+			'post_type' => 'attachment',
+			'post_parent' => $parent_post_id,
+			'post_mime_type' => $type,
+			'guid' => $upload[ 'url' ],
+		);
+
+		// Save the data
+		$id = wp_insert_attachment( $attachment, $upload[ 'file' ], $parent_post_id );
+		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
+
+		if ( $make_featured ) {
+			set_post_thumbnail( $parent_post_id, $id );
+		}
+
+		return $id;
+
+	}
+
 }
 
 
