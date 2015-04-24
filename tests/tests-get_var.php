@@ -241,6 +241,8 @@ class Tests_The_Magic extends WP_UnitTestCase {
 	/**
 	 * Test post:post_thumbnail type magic tags
 	 *
+	 * @covers \calderawp\filter\magictag::maybe_do_post_thumbnail()
+	 *
 	 * @since 0.0.1
 	 */
 	public function test_thumbnail() {
@@ -275,8 +277,11 @@ class Tests_The_Magic extends WP_UnitTestCase {
 	/**
 	 * Make an attachment to test with.
 	 *
-	 * @param null|string $upload
-	 * @param int $parent_post_id
+	 * @since 0.0.1
+	 *
+	 * @param null|string $upload File to make attachment with.
+	 * @param int $parent_post_id Optional. Post to associate with.
+	 * @param bool $make_featured Optional. If true, the default, image will be set as featured of $parent_post_id
 	 *
 	 * @return int
 	 */
