@@ -101,6 +101,12 @@ class magictag {
 
 		}
 
+		//possibly do a post_thumbnail magic tag @since 1.1.0
+		$maybe_thumbnail = $this->maybe_do_post_thumbnail( $field, $post );
+		if ( filter_var( $maybe_thumbnail, FILTER_VALIDATE_URL ) ) {
+			return $maybe_thumbnail;
+
+		}
 
 		if( isset( $post->{$field} ) ){
 			return implode( ', ', (array) $post->{$field} );
@@ -277,6 +283,41 @@ class magictag {
 		}
 
 		return $ip;
+
+	}
+
+	/**
+	 * If field is "post_thumbnail" return image source URL
+	 *
+	 * Supports .size traversal
+	 *
+	 * @param string $field
+	 * @param \WP_Post|object $post Post object
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return bool
+	 */
+	private function maybe_do_post_thumbnail( $field, $post ) {
+		if ( 'post_thumbnail' == $field || false !== strpos( $field, 'post_thumbnail.' ) ) {
+			$size = 'thumbnail';
+			if ( false !== ( $pos = strpos( $field, '.' ) ) ) {
+				$size = substr( $field, $pos + 1);
+			}
+
+			$id = get_post_thumbnail_id( $post->ID );
+			if ( 0 < absint( $id ) ) {
+				$img = wp_get_attachment_image_src( $id, $size);
+				if ( is_array( $img ) ) {
+					return $img[0];
+
+				}
+
+			}
+
+		}
+
+		return false;
 
 	}
 
