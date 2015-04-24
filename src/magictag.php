@@ -101,6 +101,7 @@ class magictag {
 
 		}
 
+		//possibly do a post_thumbnail magic tag @since 1.1.0
 		$maybe_thumbnail = $this->maybe_do_post_thumbnail( $field, $post );
 		if ( filter_var( $maybe_thumbnail, FILTER_VALIDATE_URL ) ) {
 			return $maybe_thumbnail;
