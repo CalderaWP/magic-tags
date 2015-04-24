@@ -259,15 +259,15 @@ class Tests_The_Magic extends WP_UnitTestCase {
 
 		//test default size and size traversal for a specified post
 		$magic = new \calderawp\filter\magictag();
-		$this->assertSame( $thumb[0], $magic->do_magic_tag( 'post_title is {post:' . $post_id . ':post_thumbnail}' ) );
-		$this->assertSame( $medium[0], $magic->do_magic_tag( 'post_title is {post:' . $post_id . ':post_thumbnail.medium}' ) );
+		$this->assertSame( $thumb[0], $magic->do_magic_tag( '{post:' . $post_id . ':post_thumbnail}' ) );
+		$this->assertSame( $medium[0], $magic->do_magic_tag( '{post:' . $post_id . ':post_thumbnail.medium}' ) );
 
 		//test default size and size traversal for global $post
 		global $post;
 		$post = get_post( $post_id );
 		$this->assertFalse( is_a( $post, 'WP_Error' ) );
-		$this->assertSame( $thumb[0], $magic->do_magic_tag( 'post_title is {post:post_thumbnail}' ) );
-		$this->assertSame( $medium[0], $magic->do_magic_tag( 'post_title is {post:post_thumbnail.medium}' ) );
+		$this->assertSame( $thumb[0], $magic->do_magic_tag( '{post:post_thumbnail}' ) );
+		$this->assertSame( $medium[0], $magic->do_magic_tag( '{post:post_thumbnail.medium}' ) );
 
 
 	}
