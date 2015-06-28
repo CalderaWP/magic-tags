@@ -82,6 +82,11 @@ class magictag {
 		if( !is_object( $post ) ){
 			return $in_params;
 		}
+
+		if ( 'permalink' == $field ) {
+			return esc_url( get_permalink( $post->ID ) );
+
+		}
 		
 		//handle auto-generated and <!--more--> tag excerpts @since 1.1.0
 		if ( 'post_excerpt' == $field && '' == $post->post_excerpt ) {
