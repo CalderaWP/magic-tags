@@ -83,7 +83,7 @@ class magictag {
 			return $in_params;
 		}
 
-		if ( 'permalink' == $field ) {
+		if ( 'permalink' == $field || 'post_permalink' == $field ) {
 			return esc_url( get_permalink( $post->ID ) );
 
 		}
