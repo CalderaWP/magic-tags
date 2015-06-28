@@ -116,20 +116,7 @@ class magictag {
 		return $in_params;
 
 	}
-
-	/**
-	 * Returns an empty string.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @return string
-	 */
-	public function nothing() {
-		return  '';
-
-	}
-
-
+	
 	/**
 	 * Filters a post magic tag
 	 *
