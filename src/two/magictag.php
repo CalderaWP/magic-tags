@@ -116,7 +116,7 @@ class magictag {
 			return $maybe_thumbnail;
 		}
 
-		if( false == $maybe_thumbnail ) {
+		if( 0 === $maybe_thumbnail ) {
 			return '';
 		}
 
@@ -147,7 +147,7 @@ class magictag {
 		}
 
 	}
-	
+
 	/**
 	 * Filters a post magic tag
 	 *
@@ -164,7 +164,7 @@ class magictag {
 			// a third e.g {post:24:post_title} indicates post ID 24 value post_title
 			$post = get_post( $params[0] );
 			$field = $params[1];
-			
+
 		}else{
 			// stic to current post
 			global $post;
@@ -172,7 +172,7 @@ class magictag {
 
 		}
 
-		// try object	
+		// try object
 		return $this->get_post_value( $field, $in_params, $post );
 
 	}
@@ -211,7 +211,7 @@ class magictag {
 			}
 		}
 		return $params;
-	}	
+	}
 
 	/**
 	 * Filters a POST magic tag
@@ -226,7 +226,7 @@ class magictag {
 			return wp_slash( $_POST[$params] );
 		}
 
-		return $params;		
+		return $params;
 	}
 
 	/**
@@ -291,7 +291,7 @@ class magictag {
 	 * @return    string 	converted tag value
 	 */
 	public function filter_ip( ){
-		
+
 		// get IP
 		$ip = $_SERVER['REMOTE_ADDR'];
 		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -333,9 +333,13 @@ class magictag {
 
 			}
 
+			return 0;
+
 		}
 
 		return false;
+
+
 
 	}
 
