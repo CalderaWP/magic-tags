@@ -114,7 +114,10 @@ class magictag {
 		$maybe_thumbnail = $this->maybe_do_post_thumbnail( $field, $post );
 		if ( filter_var( $maybe_thumbnail, FILTER_VALIDATE_URL ) ) {
 			return $maybe_thumbnail;
+		}
 
+		if( false == $maybe_thumbnail ) {
+			return '';
 		}
 
 		if( isset( $post->{$field} ) ){
