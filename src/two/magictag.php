@@ -143,9 +143,12 @@ class magictag {
 		$parts = explode( '.', $field );
 		$author = get_user_by( 'id', $post->post_author );
 		
-				
-		if( is_object( $author ) && 'posts_url' == $field ) {
-			return get_author_posts_url( $author->ID );
+		$parts = explode( '.', $field );
+		$author = get_user_by( 'id', $post->post_author );
+
+		if( is_object( $author ) && isset( $parts[1] ) && 'posts_url' == $parts[1] ) {
+			$link = get_author_posts_url( $author->ID );
+			return $link;
 		}
 
 		if( is_object( $author ) && isset( $parts[1] ) && isset( $author->$parts[1] ) ) {
