@@ -142,6 +142,12 @@ class magictag {
 	protected function author_traversal( $field, $post ) {
 		$parts = explode( '.', $field );
 		$author = get_user_by( 'id', $post->post_author );
+		
+				
+		if( is_object( $author ) && 'posts_url' == $field ) {
+			return get_author_posts_url( $author->ID );
+		}
+
 		if( is_object( $author ) && isset( $parts[1] ) && isset( $author->$parts[1] ) ) {
 			return $author->$parts[1];
 		}
