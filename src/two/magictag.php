@@ -110,6 +110,11 @@ class magictag {
 
 		}
 
+		$maybe_feature = $this->maybe_do_featured( $field, $post );
+		if(  is_string( $maybe_feature ) ){
+			return $maybe_feature;
+		}
+
 		//possibly do a post_thumbnail magic tag @since 1.1.0
 		$maybe_thumbnail = $this->maybe_do_post_thumbnail( $field, $post );
 		if ( filter_var( $maybe_thumbnail, FILTER_VALIDATE_URL ) ) {
@@ -347,6 +352,33 @@ class magictag {
 		}
 
 		return false;
+
+
+
+	}
+
+	/**
+	 * Handle 'post_featured' tags
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $field
+	 * @param \WP_Post|object $post Post object
+	 *
+	 * @return string|void
+	 */
+	private function maybe_do_featured( $field, $post ){
+		if ( 'post_featured' == $field ) {
+
+			$id = get_post_thumbnail_id( $post->ID );
+			if ( 0 < absint( $id ) ) {
+
+				return wp_get_attachment_image( $id, 'large' );
+			}
+
+			return '';
+
+		}
 
 
 
